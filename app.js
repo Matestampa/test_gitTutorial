@@ -1,15 +1,10 @@
-console.log("Segundo Commit")
-
-let tute="";
 
 function feature_1(){
     console.log("La feature-1 para la branch feature-1")
-}
+    
+    console.log("commit 2 del colab papa");
 
-function feature_2(){
-    console.log("La feature-2 para la branch feature-2")
-}
-
-function feature_3(){
-    console.log("La feature-3 para la branch feature-3")
+    console.log("commit 3 del colab papa");
+    
+    console.log("commit 4 del colab papa");
 }
