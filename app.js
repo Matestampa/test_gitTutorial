@@ -8,3 +8,9 @@ function feature_1(){
     
     console.log("commit 4 del colab papa");
 }
+
+function feature_2(){
+    
+    console.log("commit 1 del colab papa"); //el comentario
+
+}
