@@ -11,6 +11,6 @@ function feature_1(){
 
 function feature_2(){
     
-    console.log("commit 1 del colab papa");
+    console.log("commit 1 del colab papa"); //el comentario
 
 }
