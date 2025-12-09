@@ -19,6 +19,13 @@ jobs:
           chmod 600 ec2_key.pem
           ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << 'EOF'
             cd ${APP_DIR}
+
+            echo "PWD now:"
+            pwd
+
+            echo "Listing APP_DIR:"
+            ls -la
+            
             if [ -d ".git" ]; then
               echo "Repository exists, pulling latest changes from dev branch..."
               git pull origin dev
