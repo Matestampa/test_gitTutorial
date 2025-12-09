@@ -31,7 +31,7 @@ jobs:
               git pull origin dev
             else
               echo "Repository not found, cloning dev branch..."
-              git clone -b dev https://github.com/Matestampa/test_gitTutorial.git .
+              git clone -b dev https://github.com/Matestampa/test_gitTutorial.git
             fi
           EOF
           rm -f ec2_key.pem
