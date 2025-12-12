@@ -37,5 +37,16 @@ jobs:
               echo "Repository not found, cloning dev branch..."
               git clone -b dev https://github.com/Matestampa/test_gitTutorial.git
             fi
+
+            echo "Chequeando si existe el proceso PM2: DIFFUM_GOALS_API_DEV"
+
+            if pm2 list | grep -q "DIFFUM_GOALS_API_DEV"; then
+              echo "Proceso encontrado, reiniciando..."
+              pm2 restart DIFFUM_GOALS_API_DEV
+            else
+              echo "Proceso NO encontrado, iniciando por primera vez..."
+              pm2 start npm --name DIFFUM_GOALS_API_DEV -- run testProd --restart-delay 10000
+            fi
+
           EOF
           rm -f ec2_key.pem
