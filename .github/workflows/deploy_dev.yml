@@ -36,7 +36,15 @@ jobs:
             else
               echo "Repository not found, cloning dev branch..."
               git clone -b dev https://github.com/Matestampa/test_gitTutorial.git
+              cd "\$REPO_NAME"
             fi
+
+            echo "Instalando dependencias..."
+
+            npm ci
+
+            echo "Actualizando el paquete de schemas @matestampa/diffum-goals_mongoose-schemas"
+            npm update "@matestampa/diffum-goals_mongoose-schemas"
 
             echo "Chequeando si existe el proceso PM2: DIFFUM_GOALS_API_DEV"
 
