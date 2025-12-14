@@ -1,24 +1,35 @@
 const {LOG_VARS} = require("../config/logger_config.js");
+const {AWS_CLOUDWATCH_VARS} = require("../config/aws_config.js");
 
-const { createLogger, format, transports } = require("winston")
+const { createLogger, format, transports } = require("winston");
+const WinstonCloudWatch = require("winston-cloudwatch");
 
+// AWS CloudWatch configuration
+const awsCloudWatchConfig = {
+  ...AWS_CLOUDWATCH_VARS
+};
 
 //-------------------------- INFO LOGGER ---------------------------------------------
 const infoLogger = createLogger({
   level: "info",
   format: format.combine(
     format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-    format.colorize(),
     format.printf(({ level, message, timestamp }) => {
       return `[${timestamp}] ${level}: ${message}`;
     })
   ),
   transports: [
     //Output to console in a human readable format
-    new transports.Console(),
+    new transports.Console({
+      format: format.colorize()
+    }),
 
-    //Output to .log file for cloudWatch ingestion
-    new transports.File({ filename: LOG_VARS.infoLogPath })
+    //Output to CloudWatch
+    new WinstonCloudWatch({
+      ...awsCloudWatchConfig,
+      logGroupName: "/diffum-goals/Api/INFO",
+      logStreamName: `info-${new Date().toISOString().split('T')[0]}`
+    })
   ],
 });
 
@@ -45,10 +56,12 @@ const errorLogger = createLogger({
       )
     }),
 
-    //Output to JSON file for cloudwatch ingestion
-    new transports.File({
-      filename: LOG_VARS.errorLogPath,
-      format: format.combine(format.json())
+    //Output to CloudWatch in JSON format
+    new WinstonCloudWatch({
+      ...awsCloudWatchConfig,
+      logGroupName: "/diffum-goals/Api/ERROR",
+      logStreamName: `error-${new Date().toISOString().split('T')[0]}`,
+      jsonMessage: true
     })
   ]
 });
