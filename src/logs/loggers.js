@@ -6,8 +6,40 @@ const WinstonCloudWatch = require("winston-cloudwatch");
 
 // AWS CloudWatch configuration
 const awsCloudWatchConfig = {
-  ...AWS_CLOUDWATCH_VARS
+  ...AWS_CLOUDWATCH_VARS,
+  uploadRate : 5000,
+  maxBatchCount: 100
 };
+
+// Get the appropriate transport for info logger based on environment
+function getInfoTransport() {
+  if (LOG_VARS.localEnv) {
+    return new transports.File({ filename: LOG_VARS.infoLogPath });
+  } else {
+    return new WinstonCloudWatch({
+      ...awsCloudWatchConfig,
+      logGroupName: LOG_VARS.infoLogGroupName,
+      logStreamName: `info-${new Date().toISOString().split('T')[0]}`
+    });
+  }
+}
+
+// Get the appropriate transport for error logger based on environment
+function getErrorTransport() {
+  if (LOG_VARS.localEnv) {
+    return new transports.File({
+      filename: LOG_VARS.errorLogPath,
+      format: format.combine(format.json())
+    });
+  } else {
+    return new WinstonCloudWatch({
+      ...awsCloudWatchConfig,
+      logGroupName: LOG_VARS.errorLogGroupName,
+      logStreamName: `error-${new Date().toISOString().split('T')[0]}`,
+      jsonMessage: true
+    });
+  }
+}
 
 //-------------------------- INFO LOGGER ---------------------------------------------
 const infoLogger = createLogger({
@@ -24,12 +56,8 @@ const infoLogger = createLogger({
       format: format.colorize()
     }),
 
-    //Output to CloudWatch
-    new WinstonCloudWatch({
-      ...awsCloudWatchConfig,
-      logGroupName: "/diffum-goals/Api/INFO",
-      logStreamName: `info-${new Date().toISOString().split('T')[0]}`
-    })
+    //Output to local file or CloudWatch based on environment
+    getInfoTransport()
   ],
 });
 
@@ -56,13 +84,8 @@ const errorLogger = createLogger({
       )
     }),
 
-    //Output to CloudWatch in JSON format
-    new WinstonCloudWatch({
-      ...awsCloudWatchConfig,
-      logGroupName: "/diffum-goals/Api/ERROR",
-      logStreamName: `error-${new Date().toISOString().split('T')[0]}`,
-      jsonMessage: true
-    })
+    //Output to local file or CloudWatch based on environment
+    getErrorTransport()
   ]
 });
 
