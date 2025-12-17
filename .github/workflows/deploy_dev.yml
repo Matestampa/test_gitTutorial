@@ -6,8 +6,15 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    environment : ${{ github.ref_name == 'master' && 'production' || 'dev' }}
     
     steps:
+      - name: Show context
+        run: |
+          echo "Branch: $GITHUB_REF_NAME"
+          echo "Environment: ${{ github.ref_name == 'master' && 'production' || 'dev' }}"
+
       - name: Deploy to EC2 via SSH
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
