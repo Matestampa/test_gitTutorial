@@ -34,7 +34,7 @@ jobs:
               echo "Repository exists, pulling latest changes from dev branch..."
               git pull origin dev
             else
-              echo "Repository not found, cloning dev branch..."
+              echo "Repository not foundd, cloning dev branch..."
               git clone -b dev https://github.com/Matestampa/test_gitTutorial.git
               cd "\$REPO_NAME"
             fi
