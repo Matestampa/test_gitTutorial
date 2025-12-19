@@ -39,7 +39,7 @@ jobs:
             echo "Listing APP_DIR:"
             ls -la
             
-            if [ -d "\${REPO_NAME}/.git" ]; then
+            if [ -d "./${REPO_NAME}/.git" ]; then
               cd "${REPO_NAME}"
               echo "Repository exists, pulling latest changes from ${REPO_BRANCH} branch..."
               git pull origin ${REPO_BRANCH}
