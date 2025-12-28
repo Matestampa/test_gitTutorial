@@ -72,6 +72,7 @@ jobs:
             if curl -fs http://localhost:3000/serverUp > /dev/null; then
               echo "API is UP and responding correctly"
             else
+              pm2 stop ${PM2_PROCESS_NAME}
               echo "API health check FAILED"
               exit 1
             fi
